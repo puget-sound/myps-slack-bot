@@ -1,0 +1,5 @@
+/starterbot
+__pycache__
+bot_settings.py
+*.json
+.DS_Store
