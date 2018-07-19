@@ -75,7 +75,7 @@ def handle_command(command, channel):
         link_label = re.findall(r'"([^"]*)"', command)[0]
         response = '*Clicks on "{}"* ({} - {}) \n-------------\n{}'.format(link_label, start_date, end_date, clicks_on(link_label, start_date, end_date))
     elif command.split()[0] == 'help':
-        response = '`pageviews` \n `top clicks from ____ to ____ (Dates are optional)` \n `clicks on "____" [link name] from ____ to ____ (Dates are optional)` \n `(Dates: today / yesterday / NdaysAgo / YYYY-MM-DD)`'
+        response = '`pageviews from ____ to ____ (Dates are optional)` \n `top clicks from ____ to ____ (Dates are optional)` \n `clicks on "____" [link name] from ____ to ____ (Dates are optional)` \n `(Dates: today / yesterday / NdaysAgo / YYYY-MM-DD)`'
 
     # Sends the response back to the channel
     slack_client.api_call(
