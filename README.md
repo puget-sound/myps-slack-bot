@@ -27,3 +27,6 @@ Use the `help` command for instructions.
 
 ## Setup
 Save `bot_settings.example.py` as `bot_settings.py` and fill in values.
+
+---
+Based on this fantastic tutorial https://www.twilio.com/blog/2018/03/google-analytics-slack-bot-python.html
