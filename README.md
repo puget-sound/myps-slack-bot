@@ -1,6 +1,7 @@
 # myps-slack-bot
 Slack bot for myPugetSound analytics
 
+## Usage
 Allows access to myPugetSound analytics via Slack commands.
 
 ```
@@ -23,3 +24,6 @@ Use the `help` command for instructions.
 ```
 @myPS help
 ```
+
+## Setup
+Save `bot_settings.example.py` as `bot_settings.py` and fill in values.
