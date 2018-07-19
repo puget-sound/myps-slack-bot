@@ -1,5 +1,5 @@
 # myps-slack-bot
-Slack bot for myPugetSound analytics
+Slack bot for myPugetSound analytics :zap:
 
 ## Usage
 Allows access to myPugetSound analytics via Slack commands.
