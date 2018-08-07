@@ -156,7 +156,7 @@ def pageviews(start_date, end_date):
   answer = "```"
   for item in answer_list:
     answer += item['dimensions'][0] + ":  " + "{:,}".format(int(item['metrics'][0]['values'][0])) + "\n"
-  answer += "```\n*```        TOTAL:  " + "{:,}".format(int(response['reports'][0]['data']['totals'][0]['values'][0])) + "  ```"
+  answer += "```\n*```        TOTAL:  " + "{:,}".format(int(response['reports'][0]['data']['totals'][0]['values'][0])) + "```*"
   return answer
 
 def top_clicks(start_date, end_date):
