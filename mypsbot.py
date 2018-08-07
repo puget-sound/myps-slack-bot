@@ -67,7 +67,7 @@ def handle_command(command, channel):
     if command.startswith("kumbunwa"):
         response = ":woman-bowing:"
     if command.startswith("pageviews"):
-        response = '*Pageviews* ({} - {})\n-------------\n{}'.format(start_date, end_date, pageviews(start_date, end_date))
+        response = ':eye: *` Pageviews `* `{} → {}`\n{}'.format(start_date, end_date, pageviews(start_date, end_date))
     if command.startswith("top clicks"):
         response = '*Top Clicks* ({} - {})\n-------------\n{}'.format(start_date, end_date, top_clicks(start_date, end_date))
     if command.startswith("clicks on"):
@@ -153,10 +153,10 @@ def pageviews(start_date, end_date):
       }
   ).execute()
   answer_list = response['reports'][0]['data']['rows']
-  answer = ""
+  answer = "```"
   for item in answer_list:
-    answer += item['dimensions'][0] + " - *" + "{:,}".format(int(item['metrics'][0]['values'][0])) + "*\n "
-  answer += "-------------\nTotal - *" + "{:,}".format(int(response['reports'][0]['data']['totals'][0]['values'][0])) + "*"
+    answer += item['dimensions'][0] + ":  " + "{:,}".format(int(item['metrics'][0]['values'][0])) + "\n"
+  answer += "```\n*```        TOTAL:  " + "{:,}".format(int(response['reports'][0]['data']['totals'][0]['values'][0])) + "```*"
   return answer
 
 def top_clicks(start_date, end_date):
