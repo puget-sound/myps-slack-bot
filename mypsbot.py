@@ -155,8 +155,6 @@ def pageviews(start_date, end_date):
   answer_list = response['reports'][0]['data']['rows']
   answer = "```"
   for item in answer_list:
-    if len(item) < len(max(answer_list, key=len)):
-      answer += ' ' * (len(max(answer_list, key=len)) - len(item))
     answer += item['dimensions'][0] + ":  " + "{:,}".format(int(item['metrics'][0]['values'][0])) + "\n"
   answer += "```\n*```        TOTAL:  " + "{:,}".format(int(response['reports'][0]['data']['totals'][0]['values'][0])) + "```*"
   return answer
