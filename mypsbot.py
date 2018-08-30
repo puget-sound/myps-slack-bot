@@ -74,6 +74,8 @@ def handle_command(command, channel):
         pattern = r'"([A-Za-z0-9_\./\\-]*)"'
         link_label = re.findall(r'"([^"]*)"', command)[0]
         response = '*Clicks on "{}"* ({} - {}) \n-------------\n{}'.format(link_label, start_date, end_date, clicks_on(link_label, start_date, end_date))
+    if command.startswith("devices"):
+        response = ':eye: *` Devices `* `{} → {}`\n{}'.format(start_date, end_date, device_overview(start_date, end_date))
     elif command.split()[0] == 'help':
         response = '`pageviews from ____ to ____ (Dates are optional)` \n `top clicks from ____ to ____ (Dates are optional)` \n `clicks on "____" [link name] from ____ to ____ (Dates are optional)` \n `(Dates: today / yesterday / NdaysAgo / YYYY-MM-DD)`'
 
@@ -214,6 +216,86 @@ def clicks_on(link_label, start_date, end_date):
       answer += "-------------\nTotal - *" + "{:,}".format(int(response['reports'][0]['data']['totals'][0]['values'][0])) + "*"
   else:
       answer = "no clicks found"
+
+  return answer
+
+def device_overview(start_date, end_date):
+  analytics = initialize_analyticsreporting()
+  response = analytics.reports().batchGet(
+      body={
+        'reportRequests': [
+        {
+          'viewId': VIEW_ID,
+          "dimensions": [{"name": "ga:segment"}, {"name": "ga:deviceCategory"}],
+          'dateRanges': [{'startDate': start_date, 'endDate': end_date}],
+          'metrics': [{'expression': 'ga:users'}],
+          "segments":[
+            {"dynamicSegment":{"name": "Faculty Users","userSegment":
+                {"segmentFilters":
+                    [{"simpleSegment":{"orFiltersForSegment":
+                        {"segmentFilterClauses": [{"dimensionFilter":
+                            {"dimensionName":"ga:pagePath","operator":"PARTIAL","expressions":[SEGMENT["FACULTY"]]}
+                            }]
+                        }
+                    }
+                    }]
+                }
+            }
+            },
+            {"dynamicSegment":{"name": "Staff Users","userSegment":
+                {"segmentFilters":
+                    [{"simpleSegment":{"orFiltersForSegment":
+                        {"segmentFilterClauses": [{"dimensionFilter":
+                            {"dimensionName":"ga:pagePath","operator":"PARTIAL","expressions":[SEGMENT["STAFF"]]}
+                            }]
+                        }
+                    }
+                    }]
+                }
+            }
+            },
+            {"dynamicSegment":{"name": "Student Users","userSegment":
+                {"segmentFilters":
+                    [{"simpleSegment":{"orFiltersForSegment":
+                        {"segmentFilterClauses": [{"dimensionFilter":
+                            {"dimensionName":"ga:pagePath","operator":"PARTIAL","expressions":[SEGMENT["STUDENT"]]}
+                            }]
+                        }
+                    }
+                    }]
+                }
+            }
+            },
+            {"dynamicSegment":{"name": "Welcome Users","userSegment":
+                {"segmentFilters":
+                    [{"simpleSegment":{"orFiltersForSegment":
+                        {"segmentFilterClauses": [{"dimensionFilter":
+                            {"dimensionName":"ga:pagePath","operator":"PARTIAL","expressions":[SEGMENT["WELCOME"]]}
+                            }]
+                        }
+                    }
+                    }]
+                }
+            }
+            }]
+        }]
+      }
+  ).execute()
+  answer_list = response['reports'][0]['data']['rows']
+  #display_list = {"mobile": {"Student Users": "0", "Staff Users" : "0", "Faculty Users" : "0"}, "tablet":{"Student Users": "0", "Staff Users" : "0", "Faculty Users" : "0"}, "desktop": {"Student Users": "0", "Staff Users" : "0", "Faculty Users" : "0"} }
+  display_list = {}
+  display_list['desktop'] = {'Student Users': '0', 'Staff Users' : '0', 'Faculty Users' : '0', 'Welcome Users' : '0'}
+  display_list['mobile'] = {'Student Users': '0', 'Staff Users' : '0', 'Faculty Users' : '0', 'Welcome Users' : '0'}
+  display_list['tablet'] = {'Student Users': '0', 'Staff Users' : '0', 'Faculty Users' : '0', 'Welcome Users' : '0'}
+  answer = "```"
+  for item in answer_list:
+    display_list[item['dimensions'][1]][item['dimensions'][0]] = item['metrics'][0]['values'][0]
+  print(display_list)
+  for display_item in display_list:
+    answer += "\n" + display_item.upper() + "\n"
+    for display_list_user in display_list[display_item]:
+        answer += display_list_user + " " + display_list[display_item][display_list_user] + "\n"
+  answer += "```"
 
   return answer
 
